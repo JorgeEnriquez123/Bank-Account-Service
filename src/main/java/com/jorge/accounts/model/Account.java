@@ -21,6 +21,7 @@ public abstract class Account {
     private String id;
     private String accountNumber;
     private AccountType accountType;
+    private CurrencyType currencyType;
     private BigDecimal balance;
     private AccountStatus status;
     private LocalDateTime createdAt;
@@ -32,5 +33,9 @@ public abstract class Account {
 
     public enum AccountStatus{
         ACTIVE, CLOSED, BLOCKED
+    }
+
+    public enum CurrencyType{
+        PEN, USD
     }
 }
