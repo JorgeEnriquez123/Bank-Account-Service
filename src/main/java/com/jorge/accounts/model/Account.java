@@ -9,6 +9,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Builder
 @Data
@@ -22,7 +24,7 @@ public class Account {
     private BigDecimal balance;
     private AccountStatus status;
     private LocalDateTime createdAt;
-    private String clientId;
+    private String customerDni;
     private Integer movementsThisMonth;
 
     //SavingsAccount fields
@@ -30,6 +32,8 @@ public class Account {
 
     //CheckingAccount fields
     private BigDecimal maintenanceFee;
+    private List<String> holders;
+    private List<String> authorizedSigners;
 
     //FixedTerm fields
     private LocalDate allowedWithdrawal;

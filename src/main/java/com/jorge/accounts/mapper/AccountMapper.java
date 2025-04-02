@@ -9,16 +9,11 @@ import org.springframework.stereotype.Component;
 public class AccountMapper {
     public Account mapToAccount(AccountRequest accountRequest) {
         return Account.builder()
-                .accountNumber(accountRequest.getAccountNumber())
                 .accountType(Account.AccountType.valueOf(accountRequest.getAccountType().name()))
                 .currencyType(Account.CurrencyType.valueOf(accountRequest.getCurrencyType().name()))
                 .balance(accountRequest.getBalance())
                 .status(Account.AccountStatus.valueOf(accountRequest.getStatus().name()))
-                .clientId(accountRequest.getClientId())
-                .movementsThisMonth(accountRequest.getMovementsThisMonth())
-                .monthlyMovementsLimit(accountRequest.getMonthlyMovementsLimit())
-                .maintenanceFee(accountRequest.getMaintenanceFee())
-                .allowedWithdrawal(accountRequest.getAllowedWithdrawal())
+                .customerDni(accountRequest.getCustomerDni())
                 .build();
     }
 
@@ -31,10 +26,12 @@ public class AccountMapper {
         accountResponse.setBalance(account.getBalance());
         accountResponse.setStatus(AccountResponse.StatusEnum.valueOf(account.getStatus().name()));
         accountResponse.setCreatedAt(account.getCreatedAt());
-        accountResponse.setClientId(account.getClientId());
+        accountResponse.customerDni(account.getCustomerDni());
         accountResponse.setMovementsThisMonth(account.getMovementsThisMonth());
         accountResponse.setMonthlyMovementsLimit(account.getMonthlyMovementsLimit());
         accountResponse.setMaintenanceFee(account.getMaintenanceFee());
+        accountResponse.setHolders(account.getHolders());
+        accountResponse.setAuthorizedSigners(account.getAuthorizedSigners());
         accountResponse.setAllowedWithdrawal(account.getAllowedWithdrawal());
         return accountResponse;
     }

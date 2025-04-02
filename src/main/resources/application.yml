@@ -4,6 +4,14 @@ spring:
   config:
     import: configserver:http://localhost:8888
 
+rest:
+  clients:
+    customer:
+      base:
+        uri: http://localhost:8080
+      get-customer-by-dni:
+        uri: /customers/dni/{dni}
+
 server:
   port: 8081
   error:

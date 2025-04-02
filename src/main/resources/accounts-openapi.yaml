@@ -373,17 +373,13 @@ components:
     AccountRequest:
       type: object
       required:
-        - accountNumber
         - accountType
         - currencyType
         - balance
         - status
-        - clientId
+        - customerDni
         - movementsThisMonth
       properties:
-        accountNumber:
-          type: string
-          description: Número de cuenta
         accountType:
           type: string
           enum: [SAVINGS, CHECKING, FIXED_TERM]
@@ -400,9 +396,9 @@ components:
           type: string
           enum: [ACTIVE, CLOSED, BLOCKED]
           description: Estado de la cuenta
-        clientId:
+        customerDni:
           type: string
-          description: ID del cliente
+          description: DNI del cliente
         movementsThisMonth:
           type: integer
           description: Movimientos del mes
@@ -413,6 +409,11 @@ components:
           type: number
           format: decimal
           description: Comisión de mantenimiento (Solo para cuentas corrientes)
+        authorizedSigners:
+          type: array
+          items:
+            type: string
+          description: Lista de firmantes autorizados (Solo para cuentas corrientes)
         allowedWithdrawal:
           type: string
           format: date
@@ -427,7 +428,7 @@ components:
         - currencyType
         - balance
         - status
-        - clientId
+        - customerDni
         - movementsThisMonth
       properties:
         accountNumber:
@@ -449,9 +450,9 @@ components:
           type: string
           enum: [ACTIVE, CLOSED, BLOCKED]
           description: Estado de la cuenta
-        clientId:
+        customerDni:
           type: string
-          description: ID del cliente
+          description: DNI del cliente
         movementsThisMonth:
           type: integer
           description: Movimientos del mes
@@ -462,6 +463,16 @@ components:
           type: number
           format: decimal
           description: Comisión de mantenimiento (Solo para cuentas corrientes)
+        holders:
+          type: array
+          items:
+            type: string
+          description: Lista de titulares (Solo para cuentas corrientes)
+        authorizedSigners:
+          type: array
+          items:
+            type: string
+          description: Lista de firmantes autorizados (Solo para cuentas corrientes)
         allowedWithdrawal:
           type: string
           format: date
@@ -471,13 +482,13 @@ components:
     DepositRequest:
       type: object
       required:
-        - accountId
+        - accountNumber
         - currencyType
         - amount
       properties:
-        accountId:
+        accountNumber:
           type: string
-          description: ID de la cuenta a depositar.
+          description: Número de la cuenta a depositar.
         currencyType:
           type: string
           enum: [PEN, USD]
@@ -490,13 +501,13 @@ components:
     WithdrawalRequest:
       type: object
       required:
-        - accountId
+        - accountNumber
         - currencyType
         - amount
       properties:
-        accountId:
+        accountNumber:
           type: string
-          description: ID de la cuenta a retirar.
+          description: Número de la cuenta a retirar.
         currencyType:
           type: string
           enum: [PEN, USD]
@@ -546,9 +557,9 @@ components:
           type: string
           format: date-time
           description: Fecha de creación de la cuenta
-        clientId:
+        customerDni:
           type: string
-          description: ID del cliente
+          description: DNI del cliente
         movementsThisMonth:
           type: integer
           description: Movimientos del mes
@@ -559,6 +570,16 @@ components:
           type: number
           format: decimal
           description: Comisión de mantenimiento (Solo para cuentas corrientes)
+        holders:
+          type: array
+          items:
+            type: string
+          description: Lista de titulares (Solo para cuentas corrientes)
+        authorizedSigners:
+          type: array
+          items:
+            type: string
+          description: Lista de firmantes autorizados (Solo para cuentas corrientes)
         allowedWithdrawal:
           type: string
           format: date
@@ -636,6 +657,3 @@ components:
           type: string
           format: date-time
           description: Fecha y hora de la transacción
-        relatedTransactionId:
-          type: string
-          description: ID de transacción relacionada (si aplica)
