@@ -670,7 +670,7 @@ components:
           description: Número de cuenta
         accountType:
           type: string
-          enum: [AHORRO]
+          enum: [SAVINGS]
           description: Tipo de cuenta
         currencyType:
           type: string
@@ -709,7 +709,7 @@ components:
           description: Número de cuenta
         accountType:
           type: string
-          enum: [CORRIENTE]
+          enum: [CHECKING]
           description: Tipo de cuenta
         currencyType:
           type: string
@@ -730,6 +730,9 @@ components:
         clientId:
           type: string
           description: ID del cliente
+        movementsThisMonth:
+          type: integer
+          description: Movimientos del mes
         maintenanceFee:
           type: number
           format: decimal
@@ -746,7 +749,7 @@ components:
           description: Número de cuenta
         accountType:
           type: string
-          enum: [PLAZO_FIJO]
+          enum: [FIXED_TERM]
           description: Tipo de cuenta
         currencyType:
           type: string
@@ -767,6 +770,9 @@ components:
         clientId:
           type: string
           description: ID del cliente
+        movementsThisMonth:
+          type: integer
+          description: Movimientos del mes
         allowedWithdrawal:
           type: string
           format: date
@@ -783,7 +789,7 @@ components:
           description: Número de cuenta
         accountType:
           type: string
-          enum: [AHORRO, CORRIENTE, PLAZO_FIJO]
+          enum: [SAVINGS, CHECKING, FIXED_TERM]
           description: Tipo de cuenta
         currencyType:
           type: string
@@ -804,6 +810,9 @@ components:
         clientId:
           type: string
           description: ID del cliente
+        movementsThisMonth:
+          type: integer
+          description: Movimientos del mes
 
     BalanceResponse:
       type: object
@@ -813,7 +822,7 @@ components:
           description: Número de cuenta
         accountType:
           type: string
-          enum: [AHORRO, CORRIENTE, PLAZO_FIJO]
+          enum: [SAVINGS, CHECKING, FIXED_TERM]
           description: Tipo de cuenta
         currencyType:
           type: string

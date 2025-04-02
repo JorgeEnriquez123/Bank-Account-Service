@@ -14,6 +14,5 @@ import org.springframework.data.annotation.TypeAlias;
 @NoArgsConstructor
 @TypeAlias("savingsAccount")
 public class SavingsAccount extends Account{
-    private Integer movementsThisMonth;
     private Integer monthlyMovementsLimit;
 }

@@ -26,9 +26,10 @@ public abstract class Account {
     private AccountStatus status;
     private LocalDateTime createdAt;
     private String clientId;
+    private Integer movementsThisMonth;
 
     public enum AccountType{
-        AHORRO, CORRIENTE, PLAZO_FIJO
+        SAVINGS, CHECKING, FIXED_TERM
     }
 
     public enum AccountStatus{
