@@ -8,231 +8,6 @@ servers:
     description: Development server
 
 paths:
-  /accounts/savings:
-    post:
-      summary: Crea una nueva cuenta de ahorros
-      tags:
-        - Savings Accounts
-      operationId: createSavingsAccount
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/SavingsAccountRequest'
-      responses:
-        '201':
-          description: Cuenta de ahorros creada exitosamente
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SavingsAccountResponse'
-        '400':
-          description: Solicitud inválida
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '500':
-          description: Error interno del servidor
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-    put:
-      summary: Actualiza una cuenta de ahorros existente
-      tags:
-        - Savings Accounts
-      operationId: updateSavingsAccount
-      parameters:
-        - in: query
-          name: accountNumber
-          schema:
-            type: string
-          required: true
-          description: Número de cuenta de ahorros a actualizar
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/SavingsAccountUpdateRequest'
-      responses:
-        '200':
-          description: Cuenta de ahorros actualizada exitosamente
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SavingsAccountResponse'
-        '400':
-          description: Solicitud inválida
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '404':
-          description: Cuenta no encontrada
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '500':
-          description: Error interno del servidor
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-
-  /accounts/checking:
-    post:
-      summary: Crea una nueva cuenta corriente
-      tags:
-        - Checking Accounts
-      operationId: createCheckingAccount
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CheckingAccountRequest'
-      responses:
-        '201':
-          description: Cuenta corriente creada exitosamente
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CheckingAccountResponse'
-        '400':
-          description: Solicitud inválida
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '500':
-          description: Error interno del servidor
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-    put:
-      summary: Actualiza una cuenta corriente existente
-      tags:
-        - Checking Accounts
-      operationId: updateCheckingAccount
-      parameters:
-        - in: query
-          name: accountNumber
-          schema:
-            type: string
-          required: true
-          description: Número de cuenta corriente a actualizar
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CheckingAccountUpdateRequest'
-      responses:
-        '200':
-          description: Cuenta corriente actualizada exitosamente
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CheckingAccountResponse'
-        '400':
-          description: Solicitud inválida
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '404':
-          description: Cuenta no encontrada
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '500':
-          description: Error interno del servidor
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-
-  /accounts/fixed-term:
-    post:
-      summary: Crea una nueva cuenta a plazo fijo
-      tags:
-        - Fixed Term Accounts
-      operationId: createFixedTermAccount
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/FixedTermAccountRequest'
-      responses:
-        '201':
-          description: Cuenta a plazo fijo creada exitosamente
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FixedTermAccountResponse'
-        '400':
-          description: Solicitud inválida
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '500':
-          description: Error interno del servidor
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-    put:
-      summary: Actualiza una cuenta a plazo fijo existente
-      tags:
-        - Fixed Term Accounts
-      operationId: updateFixedTermAccount
-      parameters:
-        - in: query
-          name: accountNumber
-          schema:
-            type: string
-          required: true
-          description: Número de cuenta a plazo fijo a actualizar
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/FixedTermAccountUpdateRequest'
-      responses:
-        '200':
-          description: Cuenta a plazo fijo actualizada exitosamente
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FixedTermAccountResponse'
-        '400':
-          description: Solicitud inválida
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '404':
-          description: Cuenta no encontrada
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '500':
-          description: Error interno del servidor
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-
   /accounts:
     get:
       summary: Obtiene todas las cuentas
@@ -248,6 +23,36 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/AccountResponse'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    post:
+      summary: Crea una nueva cuenta
+      tags:
+        - Accounts
+      operationId: createAccount
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountRequest'
+      responses:
+        '201':
+          description: Cuenta creada exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountResponse'
+        '400':
+          description: Solicitud inválida
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
         '500':
           description: Error interno del servidor
           content:
@@ -316,12 +121,57 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
 
+    put:
+      summary: Actualiza una cuenta existente.
+      tags:
+        - Accounts
+      operationId: updateAccountByAccountNumber
+      parameters:
+        - in: path
+          name: accountNumber
+          schema:
+            type: string
+          required: true
+          description: Número de cuenta
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateAccountRequest'
+      responses:
+        '200':
+          description: Cuenta actualizada exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountResponse'
+        '400':
+          description: Solicitud inválida
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Cuenta no encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+
   /accounts/{accountNumber}/balance:
     get:
       summary: Obtiene el saldo disponible de una cuenta por su número de cuenta
       tags:
         - Accounts
-      operationId: getAccountBalanceByAccountNumber
+      operationId: getBalanceByAccountNumber
       parameters:
         - in: path
           name: accountNumber
@@ -336,6 +186,49 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/BalanceResponse'
+        '404':
+          description: Cuenta no encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    put:
+      summary: Actualiza el saldo disponible de una cuenta por su número de cuenta
+      tags:
+        - Accounts
+      operationId: updateBalanceByAccountNumber
+      parameters:
+        - in: path
+          name: accountNumber
+          schema:
+            type: string
+          required: true
+          description: Número de cuenta
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BalanceUpdateRequest'
+      responses:
+        '200':
+          description: Saldo de la cuenta actualizado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BalanceResponse'
+        '400':
+          description: Solicitud inválida
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
         '404':
           description: Cuenta no encontrada
           content:
@@ -476,83 +369,74 @@ paths:
 
 components:
   schemas:
-    # Requests
 
-    SavingsAccountRequest:
+    AccountRequest:
       type: object
       required:
+        - accountNumber
+        - accountType
         - currencyType
-        - clientId
         - balance
-        - monthlyMovementsLimit
+        - status
+        - clientId
+        - movementsThisMonth
       properties:
+        accountNumber:
+          type: string
+          description: Número de cuenta
+        accountType:
+          type: string
+          enum: [SAVINGS, CHECKING, FIXED_TERM]
+          description: Tipo de cuenta
         currencyType:
           type: string
           enum: [PEN, USD]
           description: Tipo de moneda
-        clientId:
-          type: string
-          description: ID del cliente
         balance:
           type: number
           format: decimal
           description: Saldo de la cuenta
+        status:
+          type: string
+          enum: [ACTIVE, CLOSED, BLOCKED]
+          description: Estado de la cuenta
+        clientId:
+          type: string
+          description: ID del cliente
+        movementsThisMonth:
+          type: integer
+          description: Movimientos del mes
         monthlyMovementsLimit:
           type: integer
-          description: Límite de movimientos mensuales
-
-    CheckingAccountRequest:
-      type: object
-      required:
-        - currencyType
-        - clientId
-        - balance
-        - maintenanceFee
-      properties:
-        currencyType:
-          type: string
-          enum: [PEN, USD]
-          description: Tipo de moneda
-        clientId:
-          type: string
-          description: ID del cliente
-        balance:
-          type: number
-          format: decimal
-          description: Saldo de la cuenta
+          description: Límite de movimientos mensuales (Solo para cuentas de ahorro)
         maintenanceFee:
           type: number
           format: decimal
-          description: Comisión de mantenimiento
-
-    FixedTermAccountRequest:
-      type: object
-      required:
-        - currencyType
-        - clientId
-        - balance
-        - allowedWithdrawal
-      properties:
-        currencyType:
-          type: string
-          enum: [PEN, USD]
-          description: Tipo de moneda
-        clientId:
-          type: string
-          description: ID del cliente
-        balance:
-          type: number
-          format: decimal
-          description: Saldo de la cuenta
+          description: Comisión de mantenimiento (Solo para cuentas corrientes)
         allowedWithdrawal:
           type: string
           format: date
-          description: Fecha permitida de retiro
+          description: Fecha permitida de retiro (Solo para cuentas a plazo fijo)
 
-    # Update Requests (Incluyen todos los campos, incluidos los heredados)
-    SavingsAccountUpdateRequest:
+
+    UpdateAccountRequest:
       type: object
+      required:
+        - accountNumber
+        - accountType
+        - currencyType
+        - balance
+        - status
+        - clientId
+        - movementsThisMonth
       properties:
+        accountNumber:
+          type: string
+          description: Número de cuenta
+        accountType:
+          type: string
+          enum: [SAVINGS, CHECKING, FIXED_TERM]
+          description: Tipo de cuenta
         currencyType:
           type: string
           enum: [PEN, USD]
@@ -568,55 +452,20 @@ components:
         clientId:
           type: string
           description: ID del cliente
+        movementsThisMonth:
+          type: integer
+          description: Movimientos del mes
         monthlyMovementsLimit:
           type: integer
-          description: Límite de movimientos mensuales
-
-    CheckingAccountUpdateRequest:
-      type: object
-      properties:
-        currencyType:
-          type: string
-          enum: [PEN, USD]
-          description: Tipo de moneda
-        balance:
-          type: number
-          format: decimal
-          description: Saldo de la cuenta
-        status:
-          type: string
-          enum: [ACTIVE, CLOSED, BLOCKED]
-          description: Estado de la cuenta
-        clientId:
-          type: string
-          description: ID del cliente
+          description: Límite de movimientos mensuales (Solo para cuentas de ahorro)
         maintenanceFee:
           type: number
           format: decimal
-          description: Comisión de mantenimiento
-
-    FixedTermAccountUpdateRequest:
-      type: object
-      properties:
-        currencyType:
-          type: string
-          enum: [PEN, USD]
-          description: Tipo de moneda
-        balance:
-          type: number
-          format: decimal
-          description: Saldo de la cuenta
-        status:
-          type: string
-          enum: [ACTIVE, CLOSED, BLOCKED]
-          description: Estado de la cuenta
-        clientId:
-          type: string
-          description: ID del cliente
+          description: Comisión de mantenimiento (Solo para cuentas corrientes)
         allowedWithdrawal:
           type: string
           format: date
-          description: Fecha permitida de retiro
+          description: Fecha permitida de retiro (Solo para cuentas a plazo fijo)
 
     # Requests para depositar y retirar
     DepositRequest:
@@ -657,127 +506,17 @@ components:
           format: decimal
           description: Monto a retirar.
 
+    BalanceUpdateRequest:
+      type: object
+      required:
+        - balance
+      properties:
+        balance:
+          type: number
+          format: decimal
+          description: Nuevo saldo de la cuenta
+
     # Responses
-
-    SavingsAccountResponse:
-      type: object
-      properties:
-        id:
-          type: string
-          description: ID de la cuenta
-        accountNumber:
-          type: string
-          description: Número de cuenta
-        accountType:
-          type: string
-          enum: [SAVINGS]
-          description: Tipo de cuenta
-        currencyType:
-          type: string
-          enum: [PEN, USD]
-          description: Tipo de moneda
-        balance:
-          type: number
-          format: decimal
-          description: Saldo de la cuenta
-        status:
-          type: string
-          enum: [ACTIVE, CLOSED, BLOCKED]
-          description: Estado de la cuenta
-        createdAt:
-          type: string
-          format: date-time
-          description: Fecha de creación de la cuenta
-        clientId:
-          type: string
-          description: ID del cliente
-        movementsThisMonth:
-          type: integer
-          description: Movimientos del mes
-        monthlyMovementsLimit:
-          type: integer
-          description: Límite de movimientos mensuales
-
-    CheckingAccountResponse:
-      type: object
-      properties:
-        id:
-          type: string
-          description: ID de la cuenta
-        accountNumber:
-          type: string
-          description: Número de cuenta
-        accountType:
-          type: string
-          enum: [CHECKING]
-          description: Tipo de cuenta
-        currencyType:
-          type: string
-          enum: [PEN, USD]
-          description: Tipo de moneda
-        balance:
-          type: number
-          format: decimal
-          description: Saldo de la cuenta
-        status:
-          type: string
-          enum: [ACTIVE, CLOSED, BLOCKED]
-          description: Estado de la cuenta
-        createdAt:
-          type: string
-          format: date-time
-          description: Fecha de creación de la cuenta
-        clientId:
-          type: string
-          description: ID del cliente
-        movementsThisMonth:
-          type: integer
-          description: Movimientos del mes
-        maintenanceFee:
-          type: number
-          format: decimal
-          description: Comisión de mantenimiento
-
-    FixedTermAccountResponse:
-      type: object
-      properties:
-        id:
-          type: string
-          description: ID de la cuenta
-        accountNumber:
-          type: string
-          description: Número de cuenta
-        accountType:
-          type: string
-          enum: [FIXED_TERM]
-          description: Tipo de cuenta
-        currencyType:
-          type: string
-          enum: [PEN, USD]
-          description: Tipo de moneda
-        balance:
-          type: number
-          format: decimal
-          description: Saldo de la cuenta
-        status:
-          type: string
-          enum: [ACTIVE, CLOSED, BLOCKED]
-          description: Estado de la cuenta
-        createdAt:
-          type: string
-          format: date-time
-          description: Fecha de creación de la cuenta
-        clientId:
-          type: string
-          description: ID del cliente
-        movementsThisMonth:
-          type: integer
-          description: Movimientos del mes
-        allowedWithdrawal:
-          type: string
-          format: date
-          description: Fecha permitida de retiro
-
     AccountResponse:
       type: object
       properties:
@@ -813,6 +552,17 @@ components:
         movementsThisMonth:
           type: integer
           description: Movimientos del mes
+        monthlyMovementsLimit:
+          type: integer
+          description: Límite de movimientos mensuales (Solo para cuentas de ahorro)
+        maintenanceFee:
+          type: number
+          format: decimal
+          description: Comisión de mantenimiento (Solo para cuentas corrientes)
+        allowedWithdrawal:
+          type: string
+          format: date
+          description: Fecha permitida de retiro (Solo para cuentas a plazo fijo)
 
     BalanceResponse:
       type: object

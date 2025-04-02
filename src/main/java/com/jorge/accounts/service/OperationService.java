@@ -1,0 +1,17 @@
+package com.jorge.accounts.service;
+
+import com.jorge.accounts.model.*;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+
+import java.math.BigDecimal;
+
+public interface OperationService {
+    Mono<Account> depositByAccountNumber(String accountNumber, DepositRequest depositRequest);
+    Mono<Account> withdrawByAccountNumber(String accountNumber, WithdrawalRequest withdrawalRequest);
+
+    Mono<BalanceResponse> getBalanceByAccountNumber(String accountNumber);
+    Mono<BalanceResponse> updateBalanceByAccountNumber(String accountNumber, BigDecimal balance);
+
+    Flux<TransactionResponse> getTransactionsByAccountNumber(String accountNumber);
+}

@@ -7,16 +7,13 @@ import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-@SuperBuilder
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@Builder
+@Data
 @Document(collection = "accounts")
-@TypeAlias("account")
-public abstract class Account {
+public class Account {
     @Id
     private String id;
     private String accountNumber;
@@ -27,6 +24,15 @@ public abstract class Account {
     private LocalDateTime createdAt;
     private String clientId;
     private Integer movementsThisMonth;
+
+    //SavingsAccount fields
+    private Integer monthlyMovementsLimit;
+
+    //CheckingAccount fields
+    private BigDecimal maintenanceFee;
+
+    //FixedTerm fields
+    private LocalDate allowedWithdrawal;
 
     public enum AccountType{
         SAVINGS, CHECKING, FIXED_TERM
