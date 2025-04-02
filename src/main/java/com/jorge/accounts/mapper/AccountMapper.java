@@ -5,16 +5,38 @@ import com.jorge.accounts.model.AccountRequest;
 import com.jorge.accounts.model.AccountResponse;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Component
 public class AccountMapper {
     public Account mapToAccount(AccountRequest accountRequest) {
-        return Account.builder()
-                .accountType(Account.AccountType.valueOf(accountRequest.getAccountType().name()))
-                .currencyType(Account.CurrencyType.valueOf(accountRequest.getCurrencyType().name()))
-                .balance(accountRequest.getBalance())
-                .status(Account.AccountStatus.valueOf(accountRequest.getStatus().name()))
-                .customerDni(accountRequest.getCustomerDni())
-                .build();
+        Account account = new Account();
+        account.setAccountType(Account.AccountType.valueOf(accountRequest.getAccountType().name()));
+        account.setCurrencyType(Account.CurrencyType.valueOf(accountRequest.getCurrencyType().name()));
+        account.setBalance(accountRequest.getBalance());
+        account.setStatus(Account.AccountStatus.valueOf(accountRequest.getStatus().name()));
+        account.setCustomerDni(accountRequest.getCustomerDni());
+        account.setMovementsThisMonth(accountRequest.getMovementsThisMonth()); // Handle nulls with default
+        account.setMaxMovementsThisMonth(accountRequest.getMaxMovementsThisMonth());
+        account.setIsCommissionFeeActive(accountRequest.getIsCommissionFeeActive());
+        account.setMovementCommissionFee(accountRequest.getMovementCommissionFee());
+
+        switch (accountRequest.getAccountType()) {
+            case SAVINGS:
+                account.setMonthlyMovementsLimit(accountRequest.getMonthlyMovementsLimit());
+                break;
+            case CHECKING:
+                account.setMaintenanceFee(accountRequest.getMaintenanceFee());
+                account.setHolders(accountRequest.getHolders());
+                account.setAuthorizedSigners(accountRequest.getAuthorizedSigners());
+                break;
+            case FIXED_TERM:
+                account.setAllowedWithdrawal(accountRequest.getAllowedWithdrawal());
+                break;
+            default:
+                throw new IllegalArgumentException("Unsupported account type: " + accountRequest.getAccountType());
+        }
+        return account;
     }
 
     public AccountResponse mapToAccountResponse(Account account) {
@@ -26,8 +48,11 @@ public class AccountMapper {
         accountResponse.setBalance(account.getBalance());
         accountResponse.setStatus(AccountResponse.StatusEnum.valueOf(account.getStatus().name()));
         accountResponse.setCreatedAt(account.getCreatedAt());
-        accountResponse.customerDni(account.getCustomerDni());
+        accountResponse.setCustomerDni(account.getCustomerDni());
         accountResponse.setMovementsThisMonth(account.getMovementsThisMonth());
+        accountResponse.setMaxMovementsThisMonth(account.getMaxMovementsThisMonth());
+        accountResponse.setIsCommissionFeeActive(account.getIsCommissionFeeActive());
+        accountResponse.setMovementCommissionFee(account.getMovementCommissionFee());
         accountResponse.setMonthlyMovementsLimit(account.getMonthlyMovementsLimit());
         accountResponse.setMaintenanceFee(account.getMaintenanceFee());
         accountResponse.setHolders(account.getHolders());

@@ -34,11 +34,11 @@ public class AccountApiDelegateImpl implements AccountsApiDelegate {
         return accountService.getAllAccounts();
     }
 
-    @Override
+    /*@Override
     public Mono<AccountResponse> updateAccountByAccountNumber(String accountNumber, Mono<UpdateAccountRequest> updateAccountRequest, ServerWebExchange exchange) {
         return updateAccountRequest.flatMap(request ->
                 accountService.updateAccountByAccountNumber(accountNumber, request));
-    }
+    }*/
 
     /*@Override
     public Mono<AccountResponse> depositByAccountNumber(String accountNumber, Mono<DepositRequest> depositRequest, ServerWebExchange exchange) {

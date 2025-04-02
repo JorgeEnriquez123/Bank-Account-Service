@@ -22,16 +22,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AccountServiceImpl implements AccountService {
     private final CustomerClient customerClient;
-
-    private final AccountUtils accountUtils;
     private final AccountMapper accountMapper;
     private final AccountRepository accountRepository;
-
-    private final Integer DEFAULT_MOVEMENT_AMOUNT = 0;
-    // SAVINGS
-    private final Integer DEFAULT_SAVINGS_ACCOUNT_MONTHLY_MOVEMENT_LIMIT = 30;      // EXAMPLE
-    // CHECKINGS
-    private final BigDecimal DEFAULT_MAINTENANCE_FEE = BigDecimal.valueOf(10.00);   // EXAMPLE
+    private final AccountUtils accountUtils;
 
     @Override
     public Flux<AccountResponse> getAllAccounts() {
@@ -55,7 +48,7 @@ public class AccountServiceImpl implements AccountService {
                     case PERSONAL -> personalCustomerValidation(customer, accountRequest);
                     case BUSINESS -> businessCustomerValidation(accountRequest);
                     default -> Mono.error(new ResponseStatusException(HttpStatus.BAD_REQUEST, "Unsupported customer type"));
-        }).map(accountMapper::mapToAccountResponse);
+                }).map(accountMapper::mapToAccountResponse);
     }
 
     private Mono<Account> personalCustomerValidation(CustomerResponse customer, AccountRequest accountRequest) {
@@ -70,9 +63,10 @@ public class AccountServiceImpl implements AccountService {
     }
 
     private Mono<Account> businessCustomerValidation(AccountRequest accountRequest) {
-        if(accountRequest.getAccountType() != AccountRequest.AccountTypeEnum.CHECKING){
+        if (accountRequest.getAccountType() != AccountRequest.AccountTypeEnum.CHECKING) {
             return Mono.error(
-                    new ResponseStatusException(HttpStatus.BAD_REQUEST, "Business customer can't create a " + accountRequest.getAccountType().name() + " account"));
+                    new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                            "Business customer can't create a " + accountRequest.getAccountType().name() + " account"));
         }
         return accountRepository.save(accountCreationSetUp(accountRequest));
     }
@@ -83,66 +77,47 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Mono<AccountResponse> updateAccountByAccountNumber(String accountNumber, UpdateAccountRequest updateRequest) {
+    public Mono<AccountResponse> updateAccountByAccountNumber(String accountNumber, AccountRequest accountRequest) {
         return accountRepository.findByAccountNumber(accountNumber)
                 .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND,
                         "Account with account number: " + accountNumber + " not found")))
-                .flatMap(existingAccount ->
-                        accountRepository.save(updateAccountFromRequest(existingAccount, updateRequest)))
+                .flatMap(existingAccount -> {
+                    existingAccount.setAccountType(Account.AccountType.valueOf(accountRequest.getAccountType().name()));
+                    existingAccount.setCurrencyType(Account.CurrencyType.valueOf(accountRequest.getCurrencyType().name()));
+                    existingAccount.setBalance(accountRequest.getBalance());
+                    existingAccount.setStatus(Account.AccountStatus.valueOf(accountRequest.getStatus().name()));
+                    existingAccount.setCustomerDni(accountRequest.getCustomerDni());
+                    existingAccount.setMovementsThisMonth(accountRequest.getMovementsThisMonth());
+                    existingAccount.setMaxMovementsThisMonth(accountRequest.getMaxMovementsThisMonth());
+                    existingAccount.setMovementCommissionFee(accountRequest.getMovementCommissionFee());
+
+                    switch (accountRequest.getAccountType()) {
+                        case SAVINGS:
+                            existingAccount.setMonthlyMovementsLimit(accountRequest.getMonthlyMovementsLimit());
+                            break;
+                        case CHECKING:
+                            existingAccount.setMaintenanceFee(accountRequest.getMaintenanceFee());
+                            existingAccount.setHolders(accountRequest.getHolders());
+                            existingAccount.setAuthorizedSigners(accountRequest.getAuthorizedSigners());
+                            break;
+                        case FIXED_TERM:
+                            existingAccount.setAllowedWithdrawal(accountRequest.getAllowedWithdrawal());
+                            break;
+                        default:
+                            return Mono.error(new IllegalArgumentException("Unsupported update for type: " + accountRequest.getAccountType()));
+                    }
+
+                    return accountRepository.save(existingAccount);
+                })
                 .map(accountMapper::mapToAccountResponse);
-    }
-
-
-    private Account updateAccountFromRequest(Account existingAccount, UpdateAccountRequest updateRequest) {
-        existingAccount.setAccountNumber(updateRequest.getAccountNumber());
-        existingAccount.setAccountType(Account.AccountType.valueOf(updateRequest.getAccountType().name()));
-        existingAccount.setCurrencyType(Account.CurrencyType.valueOf(updateRequest.getCurrencyType().name()));
-        existingAccount.setBalance(updateRequest.getBalance());
-        existingAccount.setStatus(Account.AccountStatus.valueOf(updateRequest.getStatus().name()));
-        existingAccount.setCustomerDni(updateRequest.getCustomerDni());
-        existingAccount.setMovementsThisMonth(updateRequest.getMovementsThisMonth());
-
-        switch (updateRequest.getAccountType()) {
-            case SAVINGS:
-                existingAccount.setMonthlyMovementsLimit(updateRequest.getMonthlyMovementsLimit());
-                break;
-            case CHECKING:
-                existingAccount.setMaintenanceFee(updateRequest.getMaintenanceFee());
-                existingAccount.setHolders(updateRequest.getHolders());
-                existingAccount.setAuthorizedSigners(updateRequest.getAuthorizedSigners());
-                break;
-            case FIXED_TERM:
-                existingAccount.setAllowedWithdrawal(updateRequest.getAllowedWithdrawal());
-                break;
-            default:
-                throw new IllegalArgumentException("Unsupported update for type: " + updateRequest.getAccountType());
-        }
-
-        return existingAccount;
     }
 
     public Account accountCreationSetUp(AccountRequest accountRequest) {
         Account account = accountMapper.mapToAccount(accountRequest);
-        account.setCreatedAt(LocalDateTime.now());
-        account.setAccountNumber(accountUtils.generateAccountNumber());
-        account.setMovementsThisMonth(DEFAULT_MOVEMENT_AMOUNT);
 
-        switch (accountRequest.getAccountType()) {
-            case SAVINGS:
-                account.setMonthlyMovementsLimit(DEFAULT_SAVINGS_ACCOUNT_MONTHLY_MOVEMENT_LIMIT);
-                break;
-            case CHECKING:
-                account.setMaintenanceFee(DEFAULT_MAINTENANCE_FEE);
-                account.setHolders(List.of(accountRequest.getCustomerDni()));  // Add Customer's DNI as initial holder
-                account.setAuthorizedSigners(account.getAuthorizedSigners());
-                break;
-            case FIXED_TERM:
-                account.setAllowedWithdrawal(accountRequest.getAllowedWithdrawal());
-                break;
-            default:
-                // Handle any unexpected account types
-                throw new IllegalArgumentException("Unsupported account type: " + accountRequest.getAccountType());
-        }
+        account.setAccountNumber(accountUtils.generateAccountNumber());
+        account.setCreatedAt(LocalDateTime.now());
+
         return account;
     }
 }

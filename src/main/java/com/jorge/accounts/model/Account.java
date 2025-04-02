@@ -1,19 +1,18 @@
 package com.jorge.accounts.model;
 
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Builder
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Document(collection = "accounts")
 public class Account {
     @Id
@@ -25,7 +24,11 @@ public class Account {
     private AccountStatus status;
     private LocalDateTime createdAt;
     private String customerDni;
+
     private Integer movementsThisMonth;
+    private Integer maxMovementsThisMonth;
+    private Boolean isCommissionFeeActive;
+    private BigDecimal movementCommissionFee;
 
     //SavingsAccount fields
     private Integer monthlyMovementsLimit;

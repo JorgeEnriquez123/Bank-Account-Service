@@ -138,7 +138,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateAccountRequest'
+              $ref: '#/components/schemas/AccountRequest'
       responses:
         '200':
           description: Cuenta actualizada exitosamente
@@ -369,7 +369,6 @@ paths:
 
 components:
   schemas:
-
     AccountRequest:
       type: object
       required:
@@ -378,7 +377,6 @@ components:
         - balance
         - status
         - customerDni
-        - movementsThisMonth
       properties:
         accountType:
           type: string
@@ -402,63 +400,23 @@ components:
         movementsThisMonth:
           type: integer
           description: Movimientos del mes
+        maxMovementsThisMonth:
+          type: integer
+          description: Máximo de movimientos del mes
+        isCommissionFeeActive:
+          type: boolean
+          description: Consultar si la comisión por movimiento está activa
+        movementCommissionFee:
+          type: number
+          format: decimal
+          description: Comisión por movimiento
+
+        #Savings account fields
         monthlyMovementsLimit:
           type: integer
           description: Límite de movimientos mensuales (Solo para cuentas de ahorro)
-        maintenanceFee:
-          type: number
-          format: decimal
-          description: Comisión de mantenimiento (Solo para cuentas corrientes)
-        authorizedSigners:
-          type: array
-          items:
-            type: string
-          description: Lista de firmantes autorizados (Solo para cuentas corrientes)
-        allowedWithdrawal:
-          type: string
-          format: date
-          description: Fecha permitida de retiro (Solo para cuentas a plazo fijo)
 
-
-    UpdateAccountRequest:
-      type: object
-      required:
-        - accountNumber
-        - accountType
-        - currencyType
-        - balance
-        - status
-        - customerDni
-        - movementsThisMonth
-      properties:
-        accountNumber:
-          type: string
-          description: Número de cuenta
-        accountType:
-          type: string
-          enum: [SAVINGS, CHECKING, FIXED_TERM]
-          description: Tipo de cuenta
-        currencyType:
-          type: string
-          enum: [PEN, USD]
-          description: Tipo de moneda
-        balance:
-          type: number
-          format: decimal
-          description: Saldo de la cuenta
-        status:
-          type: string
-          enum: [ACTIVE, CLOSED, BLOCKED]
-          description: Estado de la cuenta
-        customerDni:
-          type: string
-          description: DNI del cliente
-        movementsThisMonth:
-          type: integer
-          description: Movimientos del mes
-        monthlyMovementsLimit:
-          type: integer
-          description: Límite de movimientos mensuales (Solo para cuentas de ahorro)
+        #CheckingAccount fields
         maintenanceFee:
           type: number
           format: decimal
@@ -473,6 +431,8 @@ components:
           items:
             type: string
           description: Lista de firmantes autorizados (Solo para cuentas corrientes)
+
+        #FixedTerm fields
         allowedWithdrawal:
           type: string
           format: date
@@ -563,9 +523,23 @@ components:
         movementsThisMonth:
           type: integer
           description: Movimientos del mes
+        maxMovementsThisMonth:
+          type: integer
+          description: Máximo de movimientos del mes
+        isCommissionFeeActive:
+          type: boolean
+          description: Consultar si la comisión por movimiento está activa
+        movementCommissionFee:
+          type: number
+          format: decimal
+          description: Comisión por movimiento
+
+        #Savings account fields
         monthlyMovementsLimit:
           type: integer
           description: Límite de movimientos mensuales (Solo para cuentas de ahorro)
+
+        #CheckingAccount fields
         maintenanceFee:
           type: number
           format: decimal
@@ -580,6 +554,8 @@ components:
           items:
             type: string
           description: Lista de firmantes autorizados (Solo para cuentas corrientes)
+
+        #FixedTerm fields
         allowedWithdrawal:
           type: string
           format: date
@@ -634,13 +610,19 @@ components:
         id:
           type: string
           description: ID de la transacción
+        accountNumber:
+          type: string
+          description: Numero de cuenta relacionado
+        creditId:
+          type: string
+          description: Id de crédito relacionado
         transactionType:
           type: string
-          enum: [DEBIT, CREDIT, DEPOSIT, WITHDRAWAL, CREDIT_PAYMENT, CREDIT_CARD_PAYMENT]
+          enum: [ DEBIT, CREDIT, DEPOSIT, WITHDRAWAL, CREDIT_PAYMENT, CREDIT_DEPOSIT, CREDIT_CARD_CONSUMPTION, CREDIT_CARD_PAYMENT ]
           description: Tipo de transacción
         currencyType:
           type: string
-          enum: [PEN, USD]
+          enum: [ PEN, USD ]
           description: Tipo de moneda
         amount:
           type: number
@@ -648,7 +630,7 @@ components:
           description: Monto de la transacción
         status:
           type: string
-          enum: [PENDING, COMPLETED, FAILED]
+          enum: [ PENDING, COMPLETED, FAILED ]
           description: Estado de la transacción
         description:
           type: string
