@@ -160,22 +160,37 @@ public class OperationServiceImpl implements OperationService {
     }
 
     @Override
-    public Mono<BalanceResponse> updateBalanceByAccountNumber(String accountNumber, BigDecimal balance) {
+    public Mono<BalanceResponse> increaseBalanceByAccountNumber(String accountNumber, BigDecimal balance) {
         return accountRepository.findByAccountNumber(accountNumber)
-                .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        "Account with account number: " + accountNumber + " not found")))
                 .flatMap(account -> {
-                    account.setBalance(balance);
+                    account.setBalance(account.getBalance().add(balance));
                     return accountRepository.save(account);
                 })
-                .map(account -> {
-                    BalanceResponse balanceResponse = new BalanceResponse();
-                    balanceResponse.setAccountType(BalanceResponse.AccountTypeEnum.valueOf(account.getAccountType().name()));
-                    balanceResponse.setCurrencyType(BalanceResponse.CurrencyTypeEnum.valueOf(account.getCurrencyType().name()));
-                    balanceResponse.setAccountNumber(account.getAccountNumber());
-                    balanceResponse.setBalance(account.getBalance());
-                    return balanceResponse;
-                });
+                .map(this::mapToBalanceResponse).switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        "Account with account number: " + accountNumber + " not found")));
+    }
+
+    @Override
+    public Mono<BalanceResponse> decreaseBalanceByAccountNumber(String accountNumber, BigDecimal balance) {
+        return accountRepository.findByAccountNumber(accountNumber)
+                .flatMap(account -> {
+                    BigDecimal amount = account.getBalance().subtract(balance);
+                    if(account.getBalance().compareTo(amount) < 0) return Mono.error(new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                            "Insufficient balance for the decrease account"));
+                    account.setBalance(amount);
+                    return accountRepository.save(account);
+                })
+                .map(this::mapToBalanceResponse).switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        "Account with account number: " + accountNumber + " not found")));
+    }
+
+    public BalanceResponse mapToBalanceResponse(Account account){
+        BalanceResponse balanceResponse = new BalanceResponse();
+        balanceResponse.setAccountNumber(account.getAccountNumber());
+        balanceResponse.setAccountType(BalanceResponse.AccountTypeEnum.valueOf(account.getAccountType().name()));
+        balanceResponse.currencyType(BalanceResponse.CurrencyTypeEnum.valueOf(account.getCurrencyType().name()));
+        balanceResponse.setBalance(account.getBalance());
+        return balanceResponse;
     }
 
     @Override

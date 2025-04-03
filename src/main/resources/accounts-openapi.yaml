@@ -198,11 +198,58 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-    put:
-      summary: Actualiza el saldo disponible de una cuenta por su número de cuenta
+
+  /accounts/account-number/{accountNumber}/balance/increase:
+    patch:
+      summary: Incrementa el saldo disponible de una cuenta por su número de cuenta
       tags:
         - Accounts
-      operationId: updateBalanceByAccountNumber
+      operationId: increaseBalanceByAccountNumber
+      parameters:
+        - in: path
+          name: accountNumber
+          schema:
+            type: string
+          required: true
+          description: Número de cuenta
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BalanceUpdateRequest'
+      responses:
+        '200':
+          description: Saldo de la cuenta actualizado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BalanceResponse'
+        '400':
+          description: Solicitud inválida
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Cuenta no encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /accounts/account-number/{accountNumber}/balance/reduction:
+    patch:
+      summary: Reduce el saldo disponible de una cuenta por su número de cuenta
+      tags:
+        - Accounts
+      operationId: reduceBalanceByAccountNumber
       parameters:
         - in: path
           name: accountNumber

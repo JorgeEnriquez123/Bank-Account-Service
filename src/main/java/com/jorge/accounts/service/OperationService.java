@@ -11,7 +11,8 @@ public interface OperationService {
     Mono<AccountResponse> withdrawByAccountNumber(String accountNumber, WithdrawalRequest withdrawalRequest);
 
     Mono<BalanceResponse> getBalanceByAccountNumber(String accountNumber);
-    Mono<BalanceResponse> updateBalanceByAccountNumber(String accountNumber, BigDecimal balance);
+    Mono<BalanceResponse> increaseBalanceByAccountNumber(String accountNumber, BigDecimal balance);
+    Mono<BalanceResponse> decreaseBalanceByAccountNumber(String accountNumber, BigDecimal balance);
 
     Flux<TransactionResponse> getTransactionsByAccountNumber(String accountNumber);
 }

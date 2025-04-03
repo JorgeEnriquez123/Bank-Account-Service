@@ -61,9 +61,15 @@ public class AccountApiDelegateImpl implements AccountsApiDelegate {
     }
 
     @Override
-    public Mono<BalanceResponse> updateBalanceByAccountNumber(String accountNumber, Mono<BalanceUpdateRequest> balanceUpdateRequest, ServerWebExchange exchange) {
+    public Mono<BalanceResponse> increaseBalanceByAccountNumber(String accountNumber, Mono<BalanceUpdateRequest> balanceUpdateRequest, ServerWebExchange exchange) {
         return balanceUpdateRequest.flatMap(request ->
-                operationService.updateBalanceByAccountNumber(accountNumber, request.getBalance()));
+            operationService.increaseBalanceByAccountNumber(accountNumber, request.getBalance()));
+    }
+
+    @Override
+    public Mono<BalanceResponse> reduceBalanceByAccountNumber(String accountNumber, Mono<BalanceUpdateRequest> balanceUpdateRequest, ServerWebExchange exchange) {
+        return balanceUpdateRequest.flatMap(request ->
+                operationService.decreaseBalanceByAccountNumber(accountNumber, request.getBalance()));
     }
 
     @Override
