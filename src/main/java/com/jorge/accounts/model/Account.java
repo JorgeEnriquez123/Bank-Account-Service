@@ -26,7 +26,7 @@ public class Account {
     private String customerDni;
 
     private Integer movementsThisMonth;
-    private Integer maxMovementsThisMonth;
+    private Integer maxMovementsFeeFreeThisMonth;
     private Boolean isCommissionFeeActive;
     private BigDecimal movementCommissionFee;
 

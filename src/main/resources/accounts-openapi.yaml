@@ -400,9 +400,9 @@ components:
         movementsThisMonth:
           type: integer
           description: Movimientos del mes
-        maxMovementsThisMonth:
+        maxMovementsFeeFreeThisMonth:
           type: integer
-          description: Máximo de movimientos del mes
+          description: Máximo de movimientos libres de comisión del mes
         isCommissionFeeActive:
           type: boolean
           description: Consultar si la comisión por movimiento está activa
@@ -442,13 +442,9 @@ components:
     DepositRequest:
       type: object
       required:
-        - accountNumber
         - currencyType
         - amount
       properties:
-        accountNumber:
-          type: string
-          description: Número de la cuenta a depositar.
         currencyType:
           type: string
           enum: [PEN, USD]
@@ -461,13 +457,9 @@ components:
     WithdrawalRequest:
       type: object
       required:
-        - accountNumber
         - currencyType
         - amount
       properties:
-        accountNumber:
-          type: string
-          description: Número de la cuenta a retirar.
         currencyType:
           type: string
           enum: [PEN, USD]
@@ -523,9 +515,9 @@ components:
         movementsThisMonth:
           type: integer
           description: Movimientos del mes
-        maxMovementsThisMonth:
+        maxMovementsFeeFreeThisMonth:
           type: integer
-          description: Máximo de movimientos del mes
+          description: Máximo de movimientos libres de comisión del mes
         isCommissionFeeActive:
           type: boolean
           description: Consultar si la comisión por movimiento está activa
@@ -616,6 +608,10 @@ components:
         creditId:
           type: string
           description: Id de crédito relacionado
+        fee:
+          type: number
+          format: decimal
+          description: Comisión de la transacción
         transactionType:
           type: string
           enum: [ DEBIT, CREDIT, DEPOSIT, WITHDRAWAL, CREDIT_PAYMENT, CREDIT_DEPOSIT, CREDIT_CARD_CONSUMPTION, CREDIT_CARD_PAYMENT ]

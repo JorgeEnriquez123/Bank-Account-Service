@@ -7,8 +7,8 @@ import reactor.core.publisher.Mono;
 import java.math.BigDecimal;
 
 public interface OperationService {
-    Mono<Account> depositByAccountNumber(String accountNumber, DepositRequest depositRequest);
-    Mono<Account> withdrawByAccountNumber(String accountNumber, WithdrawalRequest withdrawalRequest);
+    Mono<AccountResponse> depositByAccountNumber(String accountNumber, DepositRequest depositRequest);
+    Mono<AccountResponse> withdrawByAccountNumber(String accountNumber, WithdrawalRequest withdrawalRequest);
 
     Mono<BalanceResponse> getBalanceByAccountNumber(String accountNumber);
     Mono<BalanceResponse> updateBalanceByAccountNumber(String accountNumber, BigDecimal balance);

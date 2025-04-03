@@ -88,7 +88,7 @@ public class AccountServiceImpl implements AccountService {
                     existingAccount.setStatus(Account.AccountStatus.valueOf(accountRequest.getStatus().name()));
                     existingAccount.setCustomerDni(accountRequest.getCustomerDni());
                     existingAccount.setMovementsThisMonth(accountRequest.getMovementsThisMonth());
-                    existingAccount.setMaxMovementsThisMonth(accountRequest.getMaxMovementsThisMonth());
+                    existingAccount.setMaxMovementsFeeFreeThisMonth(accountRequest.getMaxMovementsFeeFreeThisMonth());
                     existingAccount.setMovementCommissionFee(accountRequest.getMovementCommissionFee());
 
                     switch (accountRequest.getAccountType()) {

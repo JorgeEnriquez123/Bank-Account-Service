@@ -3,6 +3,7 @@ package com.jorge.accounts;
 import com.jorge.accounts.api.AccountsApiDelegate;
 import com.jorge.accounts.model.*;
 import com.jorge.accounts.service.AccountService;
+import com.jorge.accounts.service.OperationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
@@ -13,6 +14,7 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class AccountApiDelegateImpl implements AccountsApiDelegate {
     private final AccountService accountService;
+    private final OperationService operationService;
 
     @Override
     public Mono<AccountResponse> createAccount(Mono<AccountRequest> accountRequest, ServerWebExchange exchange) {
@@ -34,13 +36,14 @@ public class AccountApiDelegateImpl implements AccountsApiDelegate {
         return accountService.getAllAccounts();
     }
 
-    /*@Override
-    public Mono<AccountResponse> updateAccountByAccountNumber(String accountNumber, Mono<UpdateAccountRequest> updateAccountRequest, ServerWebExchange exchange) {
+    @Override
+    public Mono<AccountResponse> updateAccountByAccountNumber(String accountNumber, Mono<AccountRequest> updateAccountRequest, ServerWebExchange exchange) {
         return updateAccountRequest.flatMap(request ->
                 accountService.updateAccountByAccountNumber(accountNumber, request));
-    }*/
+    }
 
-    /*@Override
+    // OPERATIONS
+    @Override
     public Mono<AccountResponse> depositByAccountNumber(String accountNumber, Mono<DepositRequest> depositRequest, ServerWebExchange exchange) {
         return depositRequest.flatMap(request ->
                 operationService.depositByAccountNumber(accountNumber, request));
@@ -67,5 +70,5 @@ public class AccountApiDelegateImpl implements AccountsApiDelegate {
     public Flux<TransactionResponse> getTransactionsByAccountNumber(String accountNumber, ServerWebExchange exchange) {
         return operationService.getTransactionsByAccountNumber(accountNumber);
     }
-     */
+
 }

@@ -16,8 +16,8 @@ public class AccountMapper {
         account.setBalance(accountRequest.getBalance());
         account.setStatus(Account.AccountStatus.valueOf(accountRequest.getStatus().name()));
         account.setCustomerDni(accountRequest.getCustomerDni());
-        account.setMovementsThisMonth(accountRequest.getMovementsThisMonth()); // Handle nulls with default
-        account.setMaxMovementsThisMonth(accountRequest.getMaxMovementsThisMonth());
+        account.setMovementsThisMonth(accountRequest.getMovementsThisMonth());
+        account.setMaxMovementsFeeFreeThisMonth(accountRequest.getMaxMovementsFeeFreeThisMonth());
         account.setIsCommissionFeeActive(accountRequest.getIsCommissionFeeActive());
         account.setMovementCommissionFee(accountRequest.getMovementCommissionFee());
 
@@ -50,7 +50,7 @@ public class AccountMapper {
         accountResponse.setCreatedAt(account.getCreatedAt());
         accountResponse.setCustomerDni(account.getCustomerDni());
         accountResponse.setMovementsThisMonth(account.getMovementsThisMonth());
-        accountResponse.setMaxMovementsThisMonth(account.getMaxMovementsThisMonth());
+        accountResponse.setMaxMovementsFeeFreeThisMonth(account.getMaxMovementsFeeFreeThisMonth());
         accountResponse.setIsCommissionFeeActive(account.getIsCommissionFeeActive());
         accountResponse.setMovementCommissionFee(account.getMovementCommissionFee());
         accountResponse.setMonthlyMovementsLimit(account.getMonthlyMovementsLimit());
