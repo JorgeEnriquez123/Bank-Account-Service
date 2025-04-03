@@ -82,42 +82,19 @@ public class AccountServiceImpl implements AccountService {
                 .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND,
                         "Account with account number: " + accountNumber + " not found")))
                 .flatMap(existingAccount -> {
-                    existingAccount.setAccountType(Account.AccountType.valueOf(accountRequest.getAccountType().name()));
-                    existingAccount.setCurrencyType(Account.CurrencyType.valueOf(accountRequest.getCurrencyType().name()));
-                    existingAccount.setBalance(accountRequest.getBalance());
-                    existingAccount.setStatus(Account.AccountStatus.valueOf(accountRequest.getStatus().name()));
-                    existingAccount.setCustomerDni(accountRequest.getCustomerDni());
-                    existingAccount.setMovementsThisMonth(accountRequest.getMovementsThisMonth());
-                    existingAccount.setMaxMovementsFeeFreeThisMonth(accountRequest.getMaxMovementsFeeFreeThisMonth());
-                    existingAccount.setMovementCommissionFee(accountRequest.getMovementCommissionFee());
-
-                    switch (accountRequest.getAccountType()) {
-                        case SAVINGS:
-                            existingAccount.setMonthlyMovementsLimit(accountRequest.getMonthlyMovementsLimit());
-                            break;
-                        case CHECKING:
-                            existingAccount.setMaintenanceFee(accountRequest.getMaintenanceFee());
-                            existingAccount.setHolders(accountRequest.getHolders());
-                            existingAccount.setAuthorizedSigners(accountRequest.getAuthorizedSigners());
-                            break;
-                        case FIXED_TERM:
-                            existingAccount.setAllowedWithdrawal(accountRequest.getAllowedWithdrawal());
-                            break;
-                        default:
-                            return Mono.error(new IllegalArgumentException("Unsupported update for type: " + accountRequest.getAccountType()));
-                    }
-
-                    return accountRepository.save(existingAccount);
-                })
+                    Account account = accountMapper.mapToAccount(accountRequest);
+                    account.setId(existingAccount.getId());
+                    account.setAccountNumber(existingAccount.getAccountNumber());
+                    account.setCreatedAt(existingAccount.getCreatedAt());
+                    return accountRepository.save(account);
+                    })
                 .map(accountMapper::mapToAccountResponse);
     }
 
     public Account accountCreationSetUp(AccountRequest accountRequest) {
         Account account = accountMapper.mapToAccount(accountRequest);
-
         account.setAccountNumber(accountUtils.generateAccountNumber());
         account.setCreatedAt(LocalDateTime.now());
-
         return account;
     }
 }
