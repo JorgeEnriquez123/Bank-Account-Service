@@ -11,5 +11,5 @@ public interface AccountService {
     Mono<AccountResponse> getAccountByAccountNumber(String accountNumber);
     Mono<AccountResponse> createAccount(AccountRequest accountRequest);
     Mono<Void> deleteAccountByAccountNumber(String accountNumber);
-    Mono<AccountResponse> updateAccountByAccountNumber(String accountNumber, AccountRequest amount);
+    Mono<AccountResponse> updateAccountByAccountNumber(String accountNumber, AccountRequest accountRequest);
 }
