@@ -60,7 +60,8 @@ public class OperationServiceImpl implements OperationService {
                                 transactionRequest.setTransactionType(TransactionRequest.TransactionType.DEPOSIT);
                                 transactionRequest.setStatus(TransactionRequest.TransactionStatus.COMPLETED);
                                 transactionRequest.setDescription("Deposit to account " + accountNumber);
-                                if(savedAccount.getIsCommissionFeeActive()) transactionRequest.setFee(savedAccount.getMovementCommissionFee());
+                                if (savedAccount.getIsCommissionFeeActive()) transactionRequest.setFee(savedAccount.getMovementCommissionFee());
+                                else savedAccount.setMovementCommissionFee(BigDecimal.ZERO);
                                 // No credit, since it's a deposit
                                 transactionRequest.setCreditId(null);
 
@@ -116,6 +117,7 @@ public class OperationServiceImpl implements OperationService {
                                 transactionRequest.setStatus(TransactionRequest.TransactionStatus.COMPLETED);
                                 transactionRequest.setDescription("Withdrawal from account " + accountNumber);
                                 if(savedAccount.getIsCommissionFeeActive()) transactionRequest.setFee(savedAccount.getMovementCommissionFee());
+                                else savedAccount.setMovementCommissionFee(BigDecimal.ZERO);
                                 // No credit, since it's a withdrawal
                                 transactionRequest.setCreditId(null);
 

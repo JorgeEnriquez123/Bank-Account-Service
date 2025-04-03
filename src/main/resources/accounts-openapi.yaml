@@ -60,7 +60,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
 
-  /accounts/{accountNumber}:
+  /accounts/account-number/{accountNumber}:
     get:
       summary: Obtiene una cuenta por su número de cuenta
       tags:
@@ -166,7 +166,7 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
 
 
-  /accounts/{accountNumber}/balance:
+  /accounts/account-number/{accountNumber}/balance:
     get:
       summary: Obtiene el saldo disponible de una cuenta por su número de cuenta
       tags:
@@ -242,7 +242,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
 
-  /accounts/{accountNumber}/deposit:
+  /accounts/account-number/{accountNumber}/deposit:
     post:
       summary: Deposita dinero en una cuenta por su número de cuenta
       tags:
@@ -287,7 +287,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
 
-  /accounts/{accountNumber}/withdrawal:
+  /accounts/account-number/{accountNumber}/withdrawal:
     post:
       summary: Retira dinero de una cuenta por su número de cuenta
       tags:
@@ -332,7 +332,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
 
-  /accounts/{accountNumber}/transactions:
+  /accounts/account-number/{accountNumber}/transactions:
     get:
       summary: Obtiene las transacciones de una cuenta por su número de cuenta
       tags:
