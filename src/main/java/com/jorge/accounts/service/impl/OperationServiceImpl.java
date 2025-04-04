@@ -7,6 +7,7 @@ import com.jorge.accounts.service.OperationService;
 import com.jorge.accounts.webclient.client.TransactionClient;
 import com.jorge.accounts.webclient.model.TransactionRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -18,6 +19,7 @@ import java.time.LocalDate;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class OperationServiceImpl implements OperationService {
     private final TransactionClient transactionClient;
     private final AccountMapper accountMapper;
@@ -25,6 +27,7 @@ public class OperationServiceImpl implements OperationService {
 
     @Override
     public Mono<AccountResponse> depositByAccountNumber(String accountNumber, DepositRequest depositRequest) {
+        log.info("Depositing {} {} to account number: {}", depositRequest.getAmount(), depositRequest.getCurrencyType(), accountNumber);
         return accountRepository.findByAccountNumber(accountNumber)
                 .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND,
                         "Account with account number: " + accountNumber + " not found")))
@@ -74,6 +77,7 @@ public class OperationServiceImpl implements OperationService {
 
     @Override
     public Mono<AccountResponse> withdrawByAccountNumber(String accountNumber, WithdrawalRequest withdrawalRequest) {
+        log.info("Withdrawing {} {} from account number: {}", withdrawalRequest.getAmount(), withdrawalRequest.getCurrencyType(), accountNumber);
         return accountRepository.findByAccountNumber(accountNumber)
                 .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND,
                         "Account with account number: " + accountNumber + " not found")))
@@ -129,6 +133,7 @@ public class OperationServiceImpl implements OperationService {
     }
 
     private Mono<Account> processAccountMovement(Account account) {
+        log.info("Processing account movement for account number: {}", account.getAccountNumber());
         // Specific validations based on account type
         if (account.getAccountType() == Account.AccountType.SAVINGS) {
             if (account.getMovementsThisMonth() >= account.getMonthlyMovementsLimit()) {
@@ -148,6 +153,7 @@ public class OperationServiceImpl implements OperationService {
 
     @Override
     public Mono<BalanceResponse> getBalanceByAccountNumber(String accountNumber) {
+        log.info("Fetching balance for account number: {}", accountNumber);
         return accountRepository.findByAccountNumber(accountNumber)
                 .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND,
                         "Account with account number: " + accountNumber + " not found")))
@@ -161,6 +167,7 @@ public class OperationServiceImpl implements OperationService {
 
     @Override
     public Mono<BalanceResponse> increaseBalanceByAccountNumber(String accountNumber, BigDecimal balance) {
+        log.info("Increasing balance by {} for account number: {}", balance, accountNumber);
         return accountRepository.findByAccountNumber(accountNumber)
                 .flatMap(account -> {
                     account.setBalance(account.getBalance().add(balance));
@@ -172,6 +179,7 @@ public class OperationServiceImpl implements OperationService {
 
     @Override
     public Mono<BalanceResponse> decreaseBalanceByAccountNumber(String accountNumber, BigDecimal balance) {
+        log.info("Decreasing balance by {} for account number: {}", balance, accountNumber);
         return accountRepository.findByAccountNumber(accountNumber)
                 .flatMap(account -> {
                     BigDecimal amount = account.getBalance().subtract(balance);
@@ -195,6 +203,7 @@ public class OperationServiceImpl implements OperationService {
 
     @Override
     public Flux<TransactionResponse> getTransactionsByAccountNumber(String accountNumber) {
+        log.info("Fetching transactions for account number {}", accountNumber);
         return transactionClient.getTransactionsByAccountNumber(accountNumber);
     }
 }
